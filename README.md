@@ -4,7 +4,7 @@ A web service that identifies and links customer contact information across mult
 
 ## Live Endpoint
 
-`POST https://<your-hosted-url>/identify`
+`POST https://bitespeed-production-app.up.railway.app/identify`
 
 ## API
 
