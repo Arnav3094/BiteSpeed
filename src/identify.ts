@@ -49,14 +49,15 @@ async function mergePrimaries(primaries: any[]) {
   }
 }
 
-async function createNewSecondaryIfNeeded(
-  emailVal: string | null,
-  phoneVal: string | null,
-  clusterEmails: Set<any>,
-  clusterPhones: Set<any>,
-  truePrimaryId: number,
-  cluster: any[]
-) {
+async function createNewSecondaryIfNeeded(params: {
+  emailVal: string | null;
+  phoneVal: string | null;
+  clusterEmails: Set<any>;
+  clusterPhones: Set<any>;
+  truePrimaryId: number;
+  cluster: any[];
+}) {
+  const { emailVal, phoneVal, clusterEmails, clusterPhones, truePrimaryId, cluster } = params;
   const hasNewEmail = emailVal !== null && !clusterEmails.has(emailVal);
   const hasNewPhone = phoneVal !== null && !clusterPhones.has(phoneVal);
 
@@ -148,7 +149,14 @@ export async function identifyHandler(req: Request, res: Response) {
   const clusterEmails = new Set(cluster.map((c) => c.email).filter(Boolean));
   const clusterPhones = new Set(cluster.map((c) => c.phoneNumber).filter(Boolean));
 
-  await createNewSecondaryIfNeeded(emailVal, phoneVal, clusterEmails, clusterPhones, truePrimary.id, cluster);
+  await createNewSecondaryIfNeeded({
+    emailVal,
+    phoneVal,
+    clusterEmails,
+    clusterPhones,
+    truePrimaryId: truePrimary.id,
+    cluster,
+  });
 
   const response = buildResponse(truePrimary, cluster);
   res.json(response);
